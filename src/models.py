@@ -23,13 +23,13 @@ class User(Base):
     firstname=Column(String(64),nullable=False)
     lastname=Column(String(64),nullable=False)
     email = Column(String(250), nullable=False)
-    # followers = relationship(
-    #     "User",
-    #     secondary=user_to_user,
-    #     primaryjoin=(id == user_to_user.c.user_from_id),
-    #     secondaryjoin=(id == user_to_user.c.user_to_id),
-    #     userlist=True,
-    # )
+    followers = relationship(
+        "User",
+        secondary=user_to_user,
+        primaryjoin=(id == user_to_user.c.user_from_id),
+        secondaryjoin=(id == user_to_user.c.user_to_id),
+        uselist=True,
+    )
     posts=relationship("Post", back_populates="user", uselist=True)
     comments=relationship("User", back_populates="user", uselist=False)
 
