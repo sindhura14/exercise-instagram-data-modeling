@@ -23,20 +23,16 @@ class User(Base):
     firstname=Column(String(64),nullable=False)
     lastname=Column(String(64),nullable=False)
     email = Column(String(250), nullable=False)
-    followers = relationship(
-        "User",
-        secondary=user_to_user,
-        primaryjoin=(id == user_to_user.c.user_from_id),
-        secondaryjoin=(id == user_to_user.c.user_to_id),
-        userlist=True,
-    )
+    # followers = relationship(
+    #     "User",
+    #     secondary=user_to_user,
+    #     primaryjoin=(id == user_to_user.c.user_from_id),
+    #     secondaryjoin=(id == user_to_user.c.user_to_id),
+    #     userlist=True,
+    # )
     posts=relationship("Post", back_populates="user", uselist=True)
     comments=relationship("User", back_populates="user", uselist=False)
 
-class Follower(Base):
-    __tablename__ = "follower"
-    user_from_id=Column(Integer, ForeignKey("user.id"), nullable=False)
-    user_to_id=Column(Integer, ForeignKey("user.id"), nullable=False)
 
 class Post(Base):
     __tablename__ = 'post'
@@ -46,6 +42,7 @@ class Post(Base):
     user_id=Column(Integer, ForeignKey("user.id"), nullable=False)
     user=relationship("User", back_populates="posts", uselist=False)
     comments = relationship('Comment',back_populates="posts",uselist=False)
+    media = relationship('Media',back_populates='posts')
 
     
 
@@ -63,6 +60,7 @@ class Media(Base):
     id = Column(Integer, primary_key=True)
     url = Column(String(128),nullable=False)
     post_id=Column(Integer, ForeignKey("post.id"), nullable=False)
+    posts= relationship('Post',back_populates='media')
 
 
 
